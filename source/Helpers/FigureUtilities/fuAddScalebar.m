@@ -1,0 +1,13 @@
+function fuAddScalebar(ax, relativePosition, aspectRatio, scalebarSize, pixelSize, pixelSizeUnit, color,fontSize)
+    [xlim,ylim]=fuGetPlotLimits(ax,0,0);
+    length=scalebarSize/pixelSize;
+    xpos=xlim(1)+(xlim(2)-xlim(1))*relativePosition(1)-length;
+    ypos=ylim(1)+(ylim(2)-ylim(1))*relativePosition(2);
+    
+    rectangle('Position',[xpos,ypos, length, length*aspectRatio],'EdgeColor',color,'FaceColor',color);
+    text(xpos+length/2,ypos-0.5*length*aspectRatio,['',num2str(scalebarSize),' ', pixelSizeUnit,''],...
+         'HorizontalAlignment','center',...
+         'VerticalAlignment','bottom',...
+         'FontSize',fontSize,...
+         'Color',color);
+end

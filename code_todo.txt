@@ -1,0 +1,94 @@
+TODO Beispieldaten
+    - Videos Kalibrierung Flussprofil
+    - Datensätze Zellmessungen
+      Vorschlag:
+        - 1 Video mit Zellmessungen als Trainingsdaten
+        - 1 Video mit Zellmessungen als Beispieldaten für Auswertung
+
+TODO Scripte
+    TODO runCCTrackingLiveMicrofluidicsTestconfig
+        DONE Skript läuft
+        DONE Versionsverwaltung auf git umgestellt -> korrekte git Version wird angezeigt und mit den Ergebnisdaten abgespeichert.
+        DONE Initialisierung Mock Stage Länge korrekt für Mikrofluidik
+        TODO Nötige Anpassungen auf Nutzerseite:
+             @Matteo: Bitte Testvideo aus Zellmessung bereitstellen und in FileCamera verlinken (ggf. der Datensatz, den wir auch zur Auswertung in trainNetworkWithInputBeadCat nutzen wollen)
+
+    TODO runCCTrackingLiveMicrofluidics
+        TODO Kurzer Labortest. Es sollte nicht viel auftauchen.
+        TODO Ggf. kurze Beschreibung Implementierung eigene Kameras bzw. Stages (s. auch unten der Hinweis zur Kamera-API)
+
+    TODO runCalibrationTracking
+        DONE Auswertung angepasst. Auswerung läuft jetzt für Datensatz mf015 und erzeugt einen sinnvollen Plot, der als Start für die Implementierung der Datenauswertung der Nutzer dienen kann.
+        DONE Skript und Klasse etwas dokumentiert
+        TODO @Matteo: Kannst Du bitte einen passenden Datensatz auswählen und den mit zur Datensammlung dazunehmen? mf015 sieht mehr nach Kehricht aus als nach Partikellösung...da haben wir besseres. Die Daten mf026 aus meinem Ordner sollten besser sein. mf026 habe ich allerdings nicht hier.
+
+    TODO trainNetworkWithInputBeadCat
+        TODO Datensatz für Beispielauswertung auswählen und verlinken
+        TODO Workflow training auf imagePretrainedNetwork umstellen
+
+    TODO runAutomaticDetectionAndClassification
+        TODO Datensatz auswählen und Implementierung testen
+    
+TODO Lizenzen    
+    TODO utrack -> API ist zum Original verändert :-/ + Copy-Left-Lizenz. ->
+         https://github.com/DanuserLab/u-track
+         Verwendet habe ich Version 2.3
+         https://github.com/DanuserLab/u-track/releases/tag/v2.3
+         und dann allerdings die API angefasst und nur das halbe utrack ohne GUI benutzt (wegen dem @-Klassenchaos im Source-Code von utrack :-/)
+         DONE: -> UTrackWrapper.m. Das wird noch was Größeres...der UTrackWrapper von mir muss ein echter Wrapper werden und ein separater Download wird nötig sein! Ich würde per Fehlermeldung auf die Homepage verweisen.
+         DONE: Hinweis eingefuegt, dass u track separat gedownloaded werden muss.
+         TODO: Hinweis in Artikel einfuegen.
+         TODO: Alle Dateien mit Copyright Danuser Lab loeschen (alles im Ordner source/Helpers/ParticleTrackers/uTrackWrapped/uTrack). Die Dateien UTrackWrapper und UTrackParameters.m müssen stehen bleiben.
+    
+    DONE cprintf -> baue ich noch aus dem Logger aus. Ist nur Schönheit...
+    
+    DONE nlinfitsome -> schreibe ich noch neu
+    
+    DONE subplotTight -> ersetze ich noch durch das Matlab-interne subplot, nur Schönheit...
+    
+    DONE fuSave2Pdf -> ersetze ich noch durch exportgraphics (besser und in Matlab seit 2020a)
+    
+    DONE CrockerGrierTracker -> habe die ursprüngliche Version von Holger/Eric Dufresne im Laufe der Zeit in eine objektorientierte API transferiert. Ich verstehe die Lizenz als unproblematisch:
+         "% ; This code 'track.pro' is copyright 1999, by John C. Crocker.
+         % ; It should be considered 'freeware'- and may be distributed freely ; (outside of the military-industrial complex) in its original form
+         % ; when properly attributed."
+         DONE: Evtl. ist hier eine Abstimmung mit Eric Dufresne nötig @Holger. Er hat den Code meine ich ursprünglich nach Matlab übersetzt oder zumindest Sachen angepasst.
+           -> https://faculty.college.emory.edu/sites/weeks/idl/
+           -> Mit Holger besprochen. Veröffentlichung scheint für uns unproblematisch zu sein.
+    
+    TODO Die vortrainierten Netzwerke.
+         @Matteo: Die Netzwerke (auch unseres) sollten wir nicht direkt releasen. Ich habe die Netzwerke in diesem Ordner
+         MatlabProgramme/trunk/MatlabRoutinen/neuralNetworks/pretrainedNetworks/
+         in meinem Lehrstuhlprofil von hier:
+         https://de.mathworks.com/help/deeplearning/ug/pretrained-convolutional-neural-networks.html
+         heruntergeladen und dann mit der Anleitung in
+         getPretrainedTransferNetworkLayerGraph.m (Anleitung nur in der Version im Matlab-Projekt im Anhang) einmal lokal gespeichert. Die Funktion zieht dann die lokalen Sicherungen in meinem Profil an.
+         Fraglich, ob das noch mit den Versionen auf dem Mathworks-Server geht.
+    
+         Besser: Diese Funktion hier verwenden:
+         https://de.mathworks.com/help/deeplearning/ref/imagepretrainednetwork.html (mit Argument "NumClasses" = 2)
+         Kannst Du versuchen das einmal lauffaehig zu machen? Habt Ihr schon Erfahrung im trainieren der Netzwerke?
+
+         26.04.2026: Habe es kurz ausprobiert:
+         net=imagePretrainedNetwork("googlenet",Weights = 'none',NumClasses=2);
+         net=net.layerGraph();
+         umstellen.
+         Parameter
+             Weights = 'none' -> geht ohne Anmeldung. Wenn damit das Training startet sollte alles i.O. sein.
+             Weights = "pretrained" -> nur mit Anmeldung. Das ist das Verhalten, was ich damals benutzt habe mit der Funktion "googlenet"
+    
+    TODO Die PI-Treiber, insbes. PI-GCS-Controller. Diese sind im Labor meine ich unter C:/PI installiert und als Matlab-Pfad konfiguriert. Diese können wir nicht sinnvoll veröffentlichen, das kommt ja mit den Stages von PI mit. Anwender müssen hier unsere API für deren Stage anpassen, sofern sie nicht PI Achsen nutzen.
+         Download unter https://www.physikinstrumente.com/en/knowledge-center/downloads/product-documentation/A
+    
+    TODO Reminder-Liste: unsere Seriennummer nach dem letzten Hardwaretest aus dem Controller löschen und in der Anleitung zur Inbetriebnahme eine Notiz eintragen!
+    
+    TODO Kamera-APIs: 
+        DONE: Ggf. die API der Pixelfly. Da ist viel aus der Beispieldatei von PCO. Ist mir unklar wie kritisch das ist. -> unkritisch. Das ist anders als das Beispiel von PCO, habe das stark angepasst.
+        DONE: Hinweis auf PCO-Headerfiles eingefuegt.
+        DONE: Ich habe die API für die Hamamatsu vom MT mit eingefügt. Die verwendet die generische Standard-Matlab-Kamera-API der Image-Aquisition-Toolbox. Änderungen sollten kaum nötig sein damit quasi jede Laborkamera Kamera mit der Mikrofluidik-Applikation läuft:
+              https://de.mathworks.com/products/image-acquisition.html
+              https://de.mathworks.com/hardware-support/image-acquisition-hardware.html
+        TODO: @Matteo Kannst Du im Wiki nochmal schauen, was man noch installieren muss, um die Hamamatsu-Kamera lauffaehig zu machen? Ich habe das im Lehrstuhl-Wiki dokumentiert bei der Kamera.
+        DONE: Die File-Camera habe ich eingefügt zum Testen. Die nimmt Tiffs.
+    
+    TODO Ggf. Unterfunktionen in Klassen habe ich noch nicht geprüft -> Problem for later me.
