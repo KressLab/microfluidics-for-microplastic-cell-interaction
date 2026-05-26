@@ -7,7 +7,8 @@
 classdef FileCameraTiff< FileCamera
     methods(Access=public)
         function obj=FileCameraTiff()
-            obj.inputFilename='~/Documents/Ausbildung/Uniprofil/Messdaten/diffusion/3um_Plain_inWater1/3um_inWater_MT_20x_1_5x_2x2_bin_5Hz_OrcaFlash.tif';
+            obj.inputFilename='~/data/mf240828_micromodNR3_50pN_Channel2_01_40min.tif';
+            % obj.inputFilename='~/Documents/Ausbildung/Uniprofil/Messdaten/diffusion/3um_Plain_inWater1/3um_inWater_MT_20x_1_5x_2x2_bin_5Hz_OrcaFlash.tif';
             %obj.inputFilename='C:\Users\Installateur\Desktop\simon\messung1.tif';
             obj.logger.info('File camera tiff instantiated.');
             img=imread(obj.inputFilename,1);
@@ -19,7 +20,6 @@ classdef FileCameraTiff< FileCamera
             obj.fileImageCount=size(imageinfo,1);
             obj.resetRoi();
         end
-        
         
         function setFrameCount(obj, frameCount)
             info=imfinfo(obj.inputFilename);
