@@ -5,7 +5,10 @@ l.setCommandWindowLevel(Logger.INFO);
 l.setLogLevel(Logger.DEBUG);
 
 %% Copy to training folder new
-% ORIGINAL_FILENAMES=getFilesByRegexName('/ep1/home/wolfgang/Messdaten/mf/',true,'^mf016(.+).tif$')';
+%You can use this example to explore the method
+%for your own usage, statethe filenames you want to use for training in
+%ORIGINAL_FILENAMES as a cell array
+ORIGINAL_FILENAMES = {'~/data/mf240828_micromodNR3_50pN_Channel2_01_40min.tif'};
 for i=1:size(ORIGINAL_FILENAMES,2)
     mfe=MicrofluidicsEvaluation(ORIGINAL_FILENAMES{1,i}(1:(end-4)),false,false);
     mps=MeasurementPhaseSegmenter(ORIGINAL_FILENAMES{1,i}(1:(end-4)));
@@ -59,8 +62,16 @@ FILENAMES=getFilesByRegexName(mfCnnConstants.getTrainDataSourceFolder(),true,'mf
 l=Logger.getInstance();
 l.setCommandWindowLevel(Logger.INFO);
 
-% Train new network
-lgraph=getPretrainedTransferNetworkLayerGraph('googlenet',2,'Dropout',0.5,'WeightLearnRateFactor',1.5,'BiasLearnRateFactor',1.5);
+% Train new network; 
+% uses the googlenet network; requires the MATLAB Deep Learning Toolbox™ Model for GoogLeNet Network
+% weights = 'none' should be supported without logging in;
+% otherwise set Weights = 'pretrained'
+net=imagePretrainedNetwork("googlenet",Weights = 'none',NumClasses=2);
+lgraph=net.layerGraph();
+
+%old fct
+% lgraph=getPretrainedTransferNetworkLayerGraph('googlenet',2,'Dropout',0.5,'WeightLearnRateFactor',1.5,'BiasLearnRateFactor',1.5);
+
 % Retrain old network
 %lgraph=cb.getNetworkLayerGraph();
 
