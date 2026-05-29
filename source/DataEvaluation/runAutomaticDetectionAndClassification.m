@@ -9,7 +9,7 @@ FILENAMES=getFilesByRegexName(append(char(currentProject().RootFolder),filesep,'
 
 %% Particle Detection
 % safeParpool(12);
-% safeParpool(8);
+safeParpool(8);
 for i=1:size(FILENAMES,1)
      try
         bl=BeadLocalization(FILENAMES{i,1}(1:(end-4)),false,false);

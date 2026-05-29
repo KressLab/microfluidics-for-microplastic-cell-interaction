@@ -8,7 +8,7 @@ l.setLogLevel(Logger.DEBUG);
 %You can use this example to explore the method
 %for your own usage, statethe filenames you want to use for training in
 %ORIGINAL_FILENAMES as a cell array
-ORIGINAL_FILENAMES = {'~/data/mf240828_micromodNR3_50pN_Channel2_01_40min.tif'};
+ORIGINAL_FILENAMES = getFilesByRegexName(append(char(currentProject().RootFolder),filesep,'data'),false,'mf240828_micromodNR3_50pN_Channel2_01_40min.tif');
 for i=1:size(ORIGINAL_FILENAMES,2)
     mfe=MicrofluidicsEvaluation(ORIGINAL_FILENAMES{1,i}(1:(end-4)),false,false);
     mps=MeasurementPhaseSegmenter(ORIGINAL_FILENAMES{1,i}(1:(end-4)));
@@ -21,7 +21,7 @@ end
 l=Logger.getInstance();
 l.setCommandWindowLevel(Logger.INFO);
 
-FILENAMES=getFilesByRegexName(mfCnnConstants.getTrainDataSourceFolder(),true,'mf.+.tif')';% reicht hier auch der Ordner mit den einzelnen Frames fürs Training, also mfCnnConstants.getTrainDataSourceFolderNew()?
+FILENAMES=getFilesByRegexName(mfCnnConstants.getTrainDataSourceFolderNew(),true,'mf.+.tif')';% reicht hier auch der Ordner mit den einzelnen Frames fürs Training, also mfCnnConstants.getTrainDataSourceFolderNew()?
 
 beadCCThresh=0.87;
 movingMedianRange=0;
@@ -35,7 +35,7 @@ for i=1:size(FILENAMES,2)
 end
 
 %% Manually classify images. Use the keyboard. For key bindings, see MicrofluidicsEvaluation.WindowKeyPressFunction
-cb=CatBeads([FILENAMES{1,1}(1:(end-4))],true,true); % only one frame for categorization?
+cb=CatBeads([FILENAMES{1,1}(1:(end-4))],true,true);
 
 %% Save manually classified bead status
 cb.saveBeadStatus();
@@ -66,7 +66,7 @@ l.setCommandWindowLevel(Logger.INFO);
 % uses the googlenet network; requires the MATLAB Deep Learning Toolbox™ Model for GoogLeNet Network
 % weights = 'none' should be supported without logging in;
 % otherwise set Weights = 'pretrained'
-net=imagePretrainedNetwork("googlenet",Weights = 'none',NumClasses=2);
+net=imagePretrainedNetwork("googlenet",Weights = 'pretrained',NumClasses=2);
 lgraph=net.layerGraph();
 
 %old fct
