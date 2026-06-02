@@ -12,8 +12,8 @@ l=Logger.getInstance();
 l.setCommandWindowLevel(Logger.INFO);
 l.setLogLevel(Logger.INFO);
 
-sourceFolder='/home/wolfgang/Programming/MatlabCodePaper/data/mf015_cal_1um_3um_stu01';
-files=getFilesByRegexName(sourceFolder,true,'.*\.mpt$','015_191127_cal_stu01');
+sourceFolder='ep1/home/matteo/Mikrofluidik/NatProt/Code260513/data/Calibration/mf026_cal_1um_stu01';
+files=getFilesByRegexName(sourceFolder,true,'.*\.mpt$','026_200128_cal_stu01');
 pixelsizeM=0.1600E-6;
 
 %% Image Processing
