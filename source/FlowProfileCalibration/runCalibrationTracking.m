@@ -12,7 +12,7 @@ l=Logger.getInstance();
 l.setCommandWindowLevel(Logger.INFO);
 l.setLogLevel(Logger.INFO);
 
-sourceFolder='ep1/home/matteo/Mikrofluidik/NatProt/Code260513/data/Calibration/mf026_cal_1um_stu01';
+sourceFolder = append(char(currentProject().RootFolder),filesep,'data/Calibration');
 files=getFilesByRegexName(sourceFolder,true,'.*\.mpt$','026_200128_cal_stu01');
 pixelsizeM=0.1600E-6;
 
@@ -35,9 +35,9 @@ minTrackLengthFrameCount=20; % Trajectories shorter than this are discarded.
 % 2) Call mc.enableDebugPlots(false) to disable plotting.
 % 3) On OOM-error (GPU VRAM or CPU RAM) reduce maximum thread size.
 
-safeParpool(min(6,size(files,1)));
+% safeParpool(min(6,size(files,1)));
 tic;
-parfor i=1:size(files,1)
+for i=1:size(files,1)
     mc=MicrofluidicsCalibration(files{i,1});
     mc.enableDebugPlots(false);
     mc.detectParticles(bandpassLowPx,bandpassHighPx,detectionThreshold,minDistPx,scanRadiusPx,fitRegionRadiusPx);
@@ -50,5 +50,6 @@ toc;
 %% Plot the measured flow profile
 showPlot=true;
 files=getFilesByRegexName(sourceFolder,true,'results\.mat$');
-zRegex='(?<=ch1_z)(\d+)(?=(um_))'; % regular expression to detect the z position in the foldername
+% zRegex='(?<=ch1_z)(\d+)(?=(um_))'; % regular expression to detect the z position in the foldername
+zRegex='(?<=ch1_alpha(\d+)_z)(\d+)(?=(um/))'; % regular expression to detect the z position in the foldername
 [zM,velMS,vAvgMS,stdErrVelMS]=MicrofluidicsCalibration.getCalibrationSummaryVxOfZ(files,zRegex,pixelsizeM,showPlot);

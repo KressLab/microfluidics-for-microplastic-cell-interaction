@@ -15,21 +15,21 @@ TODO Scripte
                 -> mf240828_micromodNR3_50pN_Channel2_01_40min.tif in FileCameraTiff.m hinterlegt (27-5-26)
 
     TODO runCCTrackingLiveMicrofluidics
-        TODO Kurzer Labortest. Es sollte nicht viel auftauchen.
+        DONE Kurzer Labortest. Es sollte nicht viel auftauchen.
         TODO Ggf. kurze Beschreibung Implementierung eigene Kameras bzw. Stages (s. auch unten der Hinweis zur Kamera-API)
 
-    TODO runCalibrationTracking
+    DONE runCalibrationTracking
         DONE Auswertung angepasst. Auswerung läuft jetzt für Datensatz mf015 und erzeugt einen sinnvollen Plot, der als Start für die Implementierung der Datenauswertung der Nutzer dienen kann.
         DONE Skript und Klasse etwas dokumentiert
-        TODO @Matteo: Kannst Du bitte einen passenden Datensatz auswählen und den mit zur Datensammlung dazunehmen? mf015 sieht mehr nach Kehricht aus als nach Partikellösung...da haben wir besseres. Die Daten mf026 aus meinem Ordner sollten besser sein. mf026 habe ich allerdings nicht hier.
+        DONE @Matteo: Kannst Du bitte einen passenden Datensatz auswählen und den mit zur Datensammlung dazunehmen? mf015 sieht mehr nach Kehricht aus als nach Partikellösung...da haben wir besseres. Die Daten mf026 aus meinem Ordner sollten besser sein. mf026 habe ich allerdings nicht hier.
 
     DONE trainNetworkWithInputBeadCat
         DONE Datensatz für Beispielauswertung auswählen und verlinken
             -> '~/data/mf240828_micromodNR3_50pN_Channel2_01_40min.tif' als default in ORIGINAL_FILENAMES gesetzt (27-5-26)
         DONE Workflow training auf imagePretrainedNetwork umstellen (27-5-26)
 
-    TODO runAutomaticDetectionAndClassification
-        TODO Datensatz auswählen und Implementierung testen
+    DONE runAutomaticDetectionAndClassification
+        DONE Datensatz auswählen und Implementierung testen
     
 TODO Lizenzen    
     TODO utrack -> API ist zum Original verändert :-/ + Copy-Left-Lizenz. ->

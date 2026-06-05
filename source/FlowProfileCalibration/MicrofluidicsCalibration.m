@@ -166,7 +166,9 @@ classdef MicrofluidicsCalibration<handle
             cgt=CrockerGrierTracker();
             cgt.setSettings(maxDispPx,mem,minTrackLength);
             for i=1:obj.frameCount
-                cgt.setPositionsInNewFrame(obj.beads{1,i});
+                if ~isempty(obj.beads{1,i})
+                    cgt.setPositionsInNewFrame(obj.beads{1,i});
+                end
             end
             obj.trackedBeads=cgt.getOutputXYZTI();
             
