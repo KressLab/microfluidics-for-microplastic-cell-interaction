@@ -14,9 +14,9 @@ TODO Scripte
              @Matteo: Bitte Testvideo aus Zellmessung bereitstellen und in FileCamera verlinken (ggf. der Datensatz, den wir auch zur Auswertung in trainNetworkWithInputBeadCat nutzen wollen)
                 -> mf240828_micromodNR3_50pN_Channel2_01_40min.tif in FileCameraTiff.m hinterlegt (27-5-26)
 
-    TODO runCCTrackingLiveMicrofluidics
+    DONE runCCTrackingLiveMicrofluidics
         DONE Kurzer Labortest. Es sollte nicht viel auftauchen.
-        TODO Ggf. kurze Beschreibung Implementierung eigene Kameras bzw. Stages (s. auch unten der Hinweis zur Kamera-API)
+        DONE Ggf. kurze Beschreibung Implementierung eigene Kameras bzw. Stages (s. auch unten der Hinweis zur Kamera-API)
 
     DONE runCalibrationTracking
         DONE Auswertung angepasst. Auswerung läuft jetzt für Datensatz mf015 und erzeugt einen sinnvollen Plot, der als Start für die Implementierung der Datenauswertung der Nutzer dienen kann.
@@ -39,7 +39,7 @@ TODO Lizenzen
          und dann allerdings die API angefasst und nur das halbe utrack ohne GUI benutzt (wegen dem @-Klassenchaos im Source-Code von utrack :-/)
          DONE: -> UTrackWrapper.m. Das wird noch was Größeres...der UTrackWrapper von mir muss ein echter Wrapper werden und ein separater Download wird nötig sein! Ich würde per Fehlermeldung auf die Homepage verweisen.
          DONE: Hinweis eingefuegt, dass u track separat gedownloaded werden muss.
-         TODO: Hinweis in Artikel einfuegen.
+         DONE: Hinweis in Artikel einfuegen.
          TODO: Alle Dateien mit Copyright Danuser Lab loeschen (alles im Ordner source/Helpers/ParticleTrackers/uTrackWrapped/uTrack). Die Dateien UTrackWrapper und UTrackParameters.m müssen stehen bleiben.
     
     DONE cprintf -> baue ich noch aus dem Logger aus. Ist nur Schönheit...
@@ -79,7 +79,8 @@ TODO Lizenzen
              Weights = 'none' -> geht ohne Anmeldung. Wenn damit das Training startet sollte alles i.O. sein.
              Weights = "pretrained" -> nur mit Anmeldung. Das ist das Verhalten, was ich damals benutzt habe mit der Funktion "googlenet"
     
-    TODO Die PI-Treiber, insbes. PI-GCS-Controller. Diese sind im Labor meine ich unter C:/PI installiert und als Matlab-Pfad konfiguriert. Diese können wir nicht sinnvoll veröffentlichen, das kommt ja mit den Stages von PI mit. Anwender müssen hier unsere API für deren Stage anpassen, sofern sie nicht PI Achsen nutzen.
+    TODO Die PI-Treiber, insbes. PI-GCS-Controller. Diese sind im Labor meine ich unter C:/PI installiert und als Matlab-Pfad konfiguriert. Diese können wir nicht sinnvoll veröffentlichen, das kommt ja mit den Stages von PI mit.
+         Anwender müssen hier unsere API für deren Stage anpassen, sofern sie nicht PI Achsen nutzen.
          Download unter https://www.physikinstrumente.com/en/knowledge-center/downloads/product-documentation/A
     
     TODO Reminder-Liste: unsere Seriennummer nach dem letzten Hardwaretest aus dem Controller löschen und in der Anleitung zur Inbetriebnahme eine Notiz eintragen!

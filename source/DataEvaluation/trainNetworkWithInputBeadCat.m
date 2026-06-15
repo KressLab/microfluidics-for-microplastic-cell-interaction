@@ -67,7 +67,7 @@ l.setCommandWindowLevel(Logger.INFO);
 % weights = 'none' should be supported without logging in;
 % otherwise set Weights = 'pretrained'
 net=imagePretrainedNetwork("googlenet",Weights = 'none',NumClasses=2);
-lgraph=net.layerGraph();
+% lgraph=net.layerGraph();
 
 %old fct
 % lgraph=getPretrainedTransferNetworkLayerGraph('googlenet',2,'Dropout',0.5,'WeightLearnRateFactor',1.5,'BiasLearnRateFactor',1.5);
@@ -106,16 +106,16 @@ aug = imageDataAugmenter('RandXReflection',true,...
                          'RandYTranslation',[-3,3]);
                      
 cb=CatBeads(FILENAMES{1,1}(1:(end-4)),false,false);
-cb.trainNetwork(lgraph,trainOpt,aug,mfCnnConstants.getTrainDataFolder(),0.8);
-% imds = shuffle(imageDatastore(mfCnnConstants.getTrainDataFolder(),'IncludeSubfolders',true,'FileExtensions','.tif','LabelSource','foldernames'));
-% total=min(imds.countEachLabel.Count);
-% trainRatio = 0.8;
-% [imdsTrain,imdsValidation] = splitEachLabel(imds,floor(total*trainRatio),'randomize');
-% augImdsTrain=augmentedImageDatastore(lGraph.Layers(1).InputSize(1:2),...
-%                 imdsTrain,...
-%                 'DataAugmentation',aug,...
-%                 'ColorPreprocessing','gray2rgb');
-% net=trainnet(augImdsTrain,lGraph,"crossentropy",trainOpt);
+% cb.trainNetwork(net,trainOpt,aug,mfCnnConstants.getTrainDataFolder(),0.8);
+imds = shuffle(imageDatastore(mfCnnConstants.getTrainDataFolder(),'IncludeSubfolders',true,'FileExtensions','.tif','LabelSource','foldernames'));
+total=min(imds.countEachLabel.Count);
+trainRatio = 0.8;
+[imdsTrain,imdsValidation] = splitEachLabel(imds,floor(total*trainRatio),'randomize');
+augImdsTrain=augmentedImageDatastore(net.Layers(1).InputSize(1:2),...
+                imdsTrain,...
+                'DataAugmentation',aug,...
+                'ColorPreprocessing','gray2rgb');
+net=trainnet(augImdsTrain,net,"crossentropy",trainOpt);
 cb.saveNetwork(mfCnnConstants.getNetworkPath());
 cb.initFigure();
 
