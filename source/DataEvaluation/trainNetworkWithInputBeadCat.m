@@ -107,15 +107,16 @@ aug = imageDataAugmenter('RandXReflection',true,...
                      
 cb=CatBeads(FILENAMES{1,1}(1:(end-4)),false,false);
 % cb.trainNetwork(net,trainOpt,aug,mfCnnConstants.getTrainDataFolder(),0.8);
-imds = shuffle(imageDatastore(mfCnnConstants.getTrainDataFolder(),'IncludeSubfolders',true,'FileExtensions','.tif','LabelSource','foldernames'));
-total=min(imds.countEachLabel.Count);
-trainRatio = 0.8;
-[imdsTrain,imdsValidation] = splitEachLabel(imds,floor(total*trainRatio),'randomize');
-augImdsTrain=augmentedImageDatastore(net.Layers(1).InputSize(1:2),...
-                imdsTrain,...
-                'DataAugmentation',aug,...
-                'ColorPreprocessing','gray2rgb');
-net=trainnet(augImdsTrain,net,"crossentropy",trainOpt);
+cb.trainNetworkNew(net,trainOpt,aug,mfCnnConstants.getTrainDataFolder(),0.8);
+% imds = shuffle(imageDatastore(mfCnnConstants.getTrainDataFolder(),'IncludeSubfolders',true,'FileExtensions','.tif','LabelSource','foldernames'));
+% total=min(imds.countEachLabel.Count);
+% trainRatio = 0.8;
+% [imdsTrain,imdsValidation] = splitEachLabel(imds,floor(total*trainRatio),'randomize');
+% augImdsTrain=augmentedImageDatastore(net.Layers(1).InputSize(1:2),...
+%                 imdsTrain,...
+%                 'DataAugmentation',aug,...
+%                 'ColorPreprocessing','gray2rgb');
+% net=trainnet(augImdsTrain,net,"crossentropy",trainOpt);
 cb.saveNetwork(mfCnnConstants.getNetworkPath());
 cb.initFigure();
 
