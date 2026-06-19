@@ -448,6 +448,10 @@ classdef MicrofluidicsEvaluation < handle
             obj.fig=figure(1);
             set(obj.fig,'Name',obj.filename);
             clf(obj.fig);
+            if isempty(obj.activeFrame)
+                obj.activeFrame = 1;
+                obj.logger.warn('No active frame. Set active frame to 1.');
+            end
             image=-obj.getImage(obj.activeFrame);
             set(obj.fig,'KeyPressFcn',@obj.windowKeyPressFcn)
             

@@ -22,8 +22,9 @@ classdef mfCnnConstants
         
         function np=getNetworkPath()
             np=[char(currentProject().RootFolder),filesep,'data',filesep,...
-                'googlenet_do05_mf007_3umCOOH_J774_detectionImages_ch1_m1_26_R2019b_mf016_mf018_mf019.mat'];
+                'testnet'];
         end
+        % 'googlenet_do05_mf007_3umCOOH_J774_detectionImages_ch1_m1_26_R2019b_mf016_mf018_mf019.mat'
         
         function res=getResultLoadString()
             %res='_result_test_accurate_detection_r430.mat';
