@@ -231,14 +231,48 @@ classdef CatBeads<MicrofluidicsEvaluation
             obj.logger.info(obj.getShortFilename(), ': Classifying all Frames automatically.');
             beadCats=obj.beadCategories;
             beadCatScores=obj.beadCategoryScores;
-            parfor i=1:obj.getFrameCount()
+            for i=1:obj.getFrameCount() % change to parfor
                 if ~isempty(obj.beadPositions{i,1})
                     [beadImgs,beadFrameIds]=obj.resizeBeadImagesForNetwork(obj.cropBeadImagesForNetwork(i));
                     if ~isempty(beadFrameIds) % beadIds can be empty when the only bead(s) are too close to the boundary
                         [beadCats{i,1}(beadFrameIds,:),...
-                         beadCatScores{i,1}(beadFrameIds,:)]=classify(obj.net,beadImgs,'ExecutionEnvironment','auto',...
-                                                                                       'Acceleration','auto',...
-                                                                                       'MiniBatchSize',6);
+                        beadCatScores{i,1}(beadFrameIds,:)]=classify(obj.net,beadImgs,'ExecutionEnvironment','auto',...
+                                                                                    'Acceleration','auto',...
+                                                                                   'MiniBatchSize',6);
+                        touchingCount=sum(beadCats{i,1}==obj.CAT_TOUCHING_CELL);
+                        notTouchingCount=sum(beadCats{i,1}==obj.CAT_NOT_TOUCHING_CELL);
+                    else
+                        touchingCount=0;
+                        notTouchingCount=0;
+                    end
+                else
+                    touchingCount=0;
+                    notTouchingCount=0;
+                end
+                obj.logger.info(obj.getShortFilename(), ': Frame ', i,': Touching: ',touchingCount,' Not touching: ',notTouchingCount);
+            end
+            obj.beadCategories=beadCats;
+            obj.beadCategoryScores=beadCatScores;
+        end
+
+        function classifyAllFramesDlNetwork(obj,classes)
+            obj.clearClassification();
+            obj.logger.info(obj.getShortFilename(), ': Classifying all Frames automatically.');
+            beadCats=obj.beadCategories;
+            beadCatScores=obj.beadCategoryScores;
+            parfor i=1:obj.getFrameCount() 
+                if ~isempty(obj.beadPositions{i,1})
+                    [beadImgs,beadFrameIds]=obj.resizeBeadImagesForNetwork(obj.cropBeadImagesForNetwork(i));
+                    if ~isempty(beadFrameIds) % beadIds can be empty when the only bead(s) are too close to the boundary
+                        % rewriting table data to matrix so network can digest it
+                        tData = NaN(size(beadImgs{1,1},1),size(beadImgs{1,1},2),size(beadImgs{1,1},3), size(beadImgs,1));
+                        for j = 1:size(tData,1)
+                            tData(:,:,:,j) = beadImgs{j,1};
+                        end
+                        beadCatScores{i,1}(beadFrameIds,:) = minibatchpredict(obj.net,tData,'ExecutionEnvironment','auto',...
+                                                                'Acceleration','auto',...
+                                                                'MiniBatchSize',6);
+                        beadCats{i,1}(beadFrameIds,:) = scores2label(beadCatScores{i,1}(beadFrameIds,:), classes);
                         touchingCount=sum(beadCats{i,1}==obj.CAT_TOUCHING_CELL);
                         notTouchingCount=sum(beadCats{i,1}==obj.CAT_NOT_TOUCHING_CELL);
                     else
@@ -322,16 +356,34 @@ classdef CatBeads<MicrofluidicsEvaluation
         % augmentedImageDatastore used for training
         function [imgs,validBeadIndices]=resizeBeadImagesForNetwork(obj,imgs)
             [imgs,validBeadIndices]=selectValidImgs(obj,imgs);
-            lgraph=obj.getNetworkLayerGraph();
-            neuralNetImageInputSize=lgraph.Layers(1).InputSize;
+            if ~isa(obj.net,'dlnetwork')
+                lgraph=obj.getNetworkLayerGraph();
+                neuralNetImageInputSize=lgraph.Layers(1).InputSize;
+            else
+                neuralNetImageInputSize=obj.net.Layers(1).InputSize;
+            end
             for i=1:size(imgs,1)
                 imgs{i,1}=imresize(imgs{i,1},neuralNetImageInputSize(1:2));
                 if size(imgs{i,1},3)==1
                     imgs{i,1}=repmat(imgs{i,1},1,1,neuralNetImageInputSize(3)); % gray to rgb color
                 end
             end
-            imgs=cell2table(imgs);
+            if ~isa(obj.net,'dlnetwork')
+                imgs=cell2table(imgs);
+            end
         end
+
+        % function [imgs,validBeadIndices]=resizeBeadImagesForDlNetwork(obj,imgs)
+        %     [imgs,validBeadIndices]=selectValidImgs(obj,imgs);
+        %     neuralNetImageInputSize=obj.net.Layers(1).InputSize;
+        %     for i=1:size(imgs,1)
+        %         imgs{i,1}=imresize(imgs{i,1},neuralNetImageInputSize(1:2));
+        %         if size(imgs{i,1},3)==1
+        %             imgs{i,1}=repmat(imgs{i,1},1,1,neuralNetImageInputSize(3)); % gray to rgb color
+        %         end
+        %     end
+        %     % imgs=cell2table(imgs);
+        % end
         
         function [validImgs,validImgIndices]=selectValidImgs(~,imgs)
             validImgs=cellfun(@(x)(~isempty(x)),imgs);

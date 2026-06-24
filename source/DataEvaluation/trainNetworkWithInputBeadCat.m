@@ -21,7 +21,7 @@ end
 l=Logger.getInstance();
 l.setCommandWindowLevel(Logger.INFO);
 
-FILENAMES=getFilesByRegexName(mfCnnConstants.getTrainDataSourceFolderNew(),true,'mf.+.tif')';% reicht hier auch der Ordner mit den einzelnen Frames fürs Training, also mfCnnConstants.getTrainDataSourceFolderNew()?
+FILENAMES=getFilesByRegexName(mfCnnConstants.getTrainDataSourceFolderNew(),true,'mf.+.tif')';
 
 beadCCThresh=0.87;
 movingMedianRange=0;
@@ -118,10 +118,59 @@ cb.trainNetworkNew(net,trainOpt,aug,mfCnnConstants.getTrainDataFolder(),0.8);
 %                 'ColorPreprocessing','gray2rgb');
 % net=trainnet(augImdsTrain,net,"crossentropy",trainOpt);
 cb.saveNetwork(mfCnnConstants.getNetworkPath());
+%% Test network
+%You can use this example to explore the method
+%for your own usage, statethe filenames you want to use for testing in
+%ORIGINAL_FILENAMES as a cell array
+ORIGINAL_FILENAMES = getFilesByRegexName(append(char(currentProject().RootFolder),filesep,'data'),false,'mf250129_micromodCOOH_400pN_Channel05_01_40min.tif');
+for i=1:size(ORIGINAL_FILENAMES,2)
+    mfe=MicrofluidicsEvaluation(ORIGINAL_FILENAMES{1,i}(1:(end-4)),false,false);
+    mps=MeasurementPhaseSegmenter(ORIGINAL_FILENAMES{1,i}(1:(end-4)));
+    mps.setForce(mfe.getForceN());
+    [~,~,ruptureStartFrame]= mps.getPhaseStartFrames();
+    mfe.copyFrameToTestFolder(ruptureStartFrame-10);
+end
+%particle detection
+l=Logger.getInstance();
+l.setCommandWindowLevel(Logger.INFO);
+
+FILENAMES=getFilesByRegexName(mfCnnConstants.getTestFolder(),true,'mf.+.tif')';
+
+beadCCThresh=0.87;
+movingMedianRange=0;
+for i=1:size(FILENAMES,2)
+    bl=BeadLocalization(FILENAMES{1,i}(1:(end-4)),false,true);
+    bl.detectBeads();
+    bl.saveBeadStatus();
+end
+%track particles
+for i=1:size(FILENAMES,1)
+    try
+        bl=BeadLocalization(FILENAMES{i,1}(1:(end-4)),true,false);
+
+        if all(cellfun(@isempty,bl.beadIds))
+            bl.trackBeadsUTrack(UTrackParametersMFCellEval());
+            bl.saveBeadStatus();
+        end
+    catch e
+        l.error(FILENAMES{i,1}(end-4), ' COULD NOT BE PROCESSED. See log.',e);
+    end
+end
+%particle classification by new net
+for i=1:size(FILENAMES,1)
+    try
+        cb=CatBeads(FILENAMES{i,1}(1:(end-4)),true,false);
+        if ~all(cellfun(@isempty,cb.beadIds)) && all(vertcat(cb.beadCategories{:})==CatBeads.CAT_INVALID)
+            cb.loadNetwork();
+            cb.classifyAllFramesDlNetwork([string(CatBeads.CAT_TOUCHING_CELL), string(CatBeads.CAT_NOT_TOUCHING_CELL)]);
+            cb.saveBeadStatus();
+        end
+    catch e
+        l.error(FILENAMES{i,1}(1:(end-4)), ' COULD NOT BE PROCESSED. See log.',e);
+    end
+end
+%display figure for checking
 cb.initFigure();
-
-
-
 
 
 

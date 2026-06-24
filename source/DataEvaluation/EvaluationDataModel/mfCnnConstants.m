@@ -15,6 +15,10 @@ classdef mfCnnConstants
         function tdsf=getTrainDataSourceFolder()
             tdsf=[char(currentProject().RootFolder),filesep,'data/beadClassification/source'];
         end
+
+        function tf=getTestFolder()
+            tf=[char(currentProject().RootFolder),filesep,'data/beadClassification/test'];
+        end
         
         function tdsfn=getTrainDataSourceFolderNew()
             tdsfn=[mfCnnConstants.getTrainDataFolder,filesep,'new'];
@@ -22,7 +26,7 @@ classdef mfCnnConstants
         
         function np=getNetworkPath()
             np=[char(currentProject().RootFolder),filesep,'data',filesep,...
-                'testnet'];
+                'testnet.mat'];
         end
         % 'googlenet_do05_mf007_3umCOOH_J774_detectionImages_ch1_m1_26_R2019b_mf016_mf018_mf019.mat'
         

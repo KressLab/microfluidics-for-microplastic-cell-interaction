@@ -234,6 +234,28 @@ classdef MicrofluidicsEvaluation < handle
             imwrite(uint16(obj.getImage(frame)),outTifFilename,'WriteMode','append');
             copyfile(obj.matFilename,outMatFilename);
         end
+
+        function copyFrameToTestFolder(obj,frame)
+            learningFolder=mfCnnConstants.getTestFolder();
+            if length(frame)~=1
+                obj.logger.fatal('Only one frame supported');
+            end
+            if ~exist(learningFolder,'file')
+                mkdir(learningFolder);
+            end
+            [~,baseFilename]=fileparts(obj.filename);
+            outFilename=[learningFolder,filesep,baseFilename,'_f',num2str(frame)];
+            outMatFilename=[outFilename,'.mat'];
+            outTifFilename=[outFilename,'.tif'];
+            if exist(outMatFilename,'file')
+                delete(outMatFilename);
+            end
+            if exist(outTifFilename,'file')
+                delete(outTifFilename);
+            end
+            imwrite(uint16(obj.getImage(frame)),outTifFilename,'WriteMode','append');
+            copyfile(obj.matFilename,outMatFilename);
+        end
         
         function force=getForceN(obj)
             try
