@@ -36,16 +36,20 @@ end
 
 %% Manually classify images. Use the keyboard. For key bindings, see MicrofluidicsEvaluation.WindowKeyPressFunction
 cb=CatBeads([FILENAMES{1,1}(1:(end-4))],true,true);
+%Do not close window before saving!
 
 %% Save manually classified bead status
 cb.saveBeadStatus();
 
 %% Manually copy classified new training source data to source folder
-% to be automized
-
+try
+    copyfile([mfCnnConstants.getTrainDataSourceFolderNew,filesep,'*'],mfCnnConstants.getTrainDataSourceFolder());
+catch e
+    l.error(e);
+end
 %% Write training data
 try
-    rmdir(mfCnnConstants.getTrainDataFolder(),'s'); % ich bin ein bisschen verwirrt, welcher Ordner für was da ist
+    rmdir(mfCnnConstants.getTrainDataFolder(),'s');
 end
 FILENAMES=getFilesByRegexName(mfCnnConstants.getTrainDataSourceFolder(),true,'.+.tif')';
 for i=1:size(FILENAMES,2)
