@@ -1,11 +1,11 @@
-TODO Beispieldaten
+DONE Beispieldaten
     - Videos Kalibrierung Flussprofil
     - Datensätze Zellmessungen
       Vorschlag:
         - 1 Video mit Zellmessungen als Trainingsdaten
         - 1 Video mit Zellmessungen als Beispieldaten für Auswertung
 
-TODO Scripte
+DONE Scripte
     DONE runCCTrackingLiveMicrofluidicsTestconfig
         DONE Skript läuft
         DONE Versionsverwaltung auf git umgestellt -> korrekte git Version wird angezeigt und mit den Ergebnisdaten abgespeichert.
