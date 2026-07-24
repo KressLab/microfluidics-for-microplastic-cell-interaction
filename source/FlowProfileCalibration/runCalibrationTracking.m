@@ -50,6 +50,5 @@ toc;
 %% Plot the measured flow profile
 showPlot=true;
 files=getFilesByRegexName(sourceFolder,true,'results\.mat$');
-% zRegex='(?<=ch1_z)(\d+)(?=(um_))'; % regular expression to detect the z position in the foldername
 zRegex='(?<=ch1_alpha(\d+)_z)(\d+)(?=(um/))'; % regular expression to detect the z position in the foldername
 [zM,velMS,vAvgMS,stdErrVelMS]=MicrofluidicsCalibration.getCalibrationSummaryVxOfZ(files,zRegex,pixelsizeM,showPlot);

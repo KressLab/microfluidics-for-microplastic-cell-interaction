@@ -27,9 +27,6 @@ beadCCThresh=0.87;
 movingMedianRange=0;
 for i=1:size(FILENAMES,2)
     bl=BeadLocalization(FILENAMES{1,i}(1:(end-4)),false,true);
-    % bl.detectBeads(movingMedianRange,beadCCThresh);           %
-    % detectBeads nimmt nur obj als Argument; obige Zeile wirft einen
-    % Fehler
     bl.detectBeads();
     bl.saveBeadStatus();
 end
@@ -73,8 +70,6 @@ l.setCommandWindowLevel(Logger.INFO);
 net=imagePretrainedNetwork("googlenet",Weights = 'none',NumClasses=2);
 % lgraph=net.layerGraph();
 
-%old fct
-% lgraph=getPretrainedTransferNetworkLayerGraph('googlenet',2,'Dropout',0.5,'WeightLearnRateFactor',1.5,'BiasLearnRateFactor',1.5);
 
 % Retrain old network
 %lgraph=cb.getNetworkLayerGraph();
@@ -110,22 +105,15 @@ aug = imageDataAugmenter('RandXReflection',true,...
                          'RandYTranslation',[-3,3]);
                      
 cb=CatBeads(FILENAMES{1,1}(1:(end-4)),false,false);
-% cb.trainNetwork(net,trainOpt,aug,mfCnnConstants.getTrainDataFolder(),0.8);
 cb.trainNetworkNew(net,trainOpt,aug,mfCnnConstants.getTrainDataFolder(),0.8);
-% imds = shuffle(imageDatastore(mfCnnConstants.getTrainDataFolder(),'IncludeSubfolders',true,'FileExtensions','.tif','LabelSource','foldernames'));
-% total=min(imds.countEachLabel.Count);
-% trainRatio = 0.8;
-% [imdsTrain,imdsValidation] = splitEachLabel(imds,floor(total*trainRatio),'randomize');
-% augImdsTrain=augmentedImageDatastore(net.Layers(1).InputSize(1:2),...
-%                 imdsTrain,...
-%                 'DataAugmentation',aug,...
-%                 'ColorPreprocessing','gray2rgb');
-% net=trainnet(augImdsTrain,net,"crossentropy",trainOpt);
+%make sure to adjust the network path in mfCnnConstants.getNetworkPath() to
+%the path where you want to save your network!
 cb.saveNetwork(mfCnnConstants.getNetworkPath());
 %% Test network
 %You can use this example to explore the method
 %for your own usage, statethe filenames you want to use for testing in
 %ORIGINAL_FILENAMES as a cell array
+%make sure to adjust the network path in mfCnnConstants.getNetworkPath()
 ORIGINAL_FILENAMES = getFilesByRegexName(append(char(currentProject().RootFolder),filesep,'data'),false,'mf250129_micromodCOOH_400pN_Channel05_01_40min.tif');
 for i=1:size(ORIGINAL_FILENAMES,2)
     mfe=MicrofluidicsEvaluation(ORIGINAL_FILENAMES{1,i}(1:(end-4)),false,false);
