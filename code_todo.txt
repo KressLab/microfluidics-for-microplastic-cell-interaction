@@ -83,7 +83,7 @@ TODO Lizenzen
          Anwender müssen hier unsere API für deren Stage anpassen, sofern sie nicht PI Achsen nutzen.
          Download unter https://www.physikinstrumente.com/en/knowledge-center/downloads/product-documentation/A
     
-    TODO Reminder-Liste: unsere Seriennummer nach dem letzten Hardwaretest aus dem Controller löschen und in der Anleitung zur Inbetriebnahme eine Notiz eintragen!
+    DONE Reminder-Liste: unsere Seriennummer nach dem letzten Hardwaretest aus dem Controller löschen und in der Anleitung zur Inbetriebnahme eine Notiz eintragen!
     
     DONE Kamera-APIs: 
         DONE: Ggf. die API der Pixelfly. Da ist viel aus der Beispieldatei von PCO. Ist mir unklar wie kritisch das ist. -> unkritisch. Das ist anders als das Beispiel von PCO, habe das stark angepasst.
@@ -95,4 +95,4 @@ TODO Lizenzen
                 -> Info in OrcaFlashV2.m hinzugefügt (27.5.26)
         DONE: Die File-Camera habe ich eingefügt zum Testen. Die nimmt Tiffs.
     
-    TODO Ggf. Unterfunktionen in Klassen habe ich noch nicht geprüft -> Problem for later me.
+    DONE Ggf. Unterfunktionen in Klassen habe ich noch nicht geprüft -> Problem for later me.

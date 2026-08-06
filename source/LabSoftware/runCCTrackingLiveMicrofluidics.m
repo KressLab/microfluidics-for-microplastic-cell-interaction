@@ -17,6 +17,7 @@ logger.setIncludeFilter({''});
 core=CCTLCore();
 core.addCCTLModule(FocusMeasureModule());
 core.setCamera(PCOPixelfly());
+obj.logger.warn('You might need to add the path to the folder which is installed by the PI software. In our case this was C:\Users\Public\PI')
 core.addCCTLModule(MicrofluidicsModule(PI_GCS_ControllerDebugWrapper(PI_GCS_Controller())));
 
 core.loadAndInit();

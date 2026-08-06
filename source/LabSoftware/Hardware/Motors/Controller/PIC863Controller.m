@@ -3,7 +3,7 @@
 classdef PIC863Controller < PILinearStageController
     methods
         function obj = PIC863Controller(piGcsController)
-            obj@PILinearStageController(piGcsController,'0175500861');
+            obj@PILinearStageController(piGcsController,"enter Serial Number here");
         end
     end
 end
