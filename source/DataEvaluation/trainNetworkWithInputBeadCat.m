@@ -67,7 +67,7 @@ l.setCommandWindowLevel(Logger.INFO);
 % uses the googlenet network; requires the MATLAB Deep Learning Toolbox™ Model for GoogLeNet Network
 % weights = 'none' should be supported without logging in;
 % otherwise set Weights = 'pretrained'
-net=imagePretrainedNetwork("googlenet",Weights = 'none',NumClasses=2);
+net=imagePretrainedNetwork("googlenet",Weights = 'pretrained',NumClasses=2);
 % lgraph=net.layerGraph();
 
 
